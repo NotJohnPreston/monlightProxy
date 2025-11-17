@@ -1,0 +1,42 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+USAGE.md
+*.md
+
+# Environment files (будут переданы через docker-compose)
+.env.example
+
+# Compiled binaries
+rtsconns-api
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test files
+*_test.go
+test/
+*.test
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Logs
+*.log

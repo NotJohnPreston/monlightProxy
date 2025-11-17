@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  rtsconns-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rtsconns-api
+    restart: unless-stopped
+
+    # Порты
+    ports:
+      - "8080:8080"
+
+    # Переменные окружения
+    environment:
+      - BASE_URL=${BASE_URL:-https://planet2.moonlightentry.space}
+      - AUTH_USER=${AUTH_USER:-admin}
+      - AUTH_PASS=${AUTH_PASS}
+      - PORT=${PORT:-8080}
+      - MOCK_MODE=${MOCK_MODE:-false}
+      - TZ=Europe/Moscow
+
+    # Использовать .env файл
+    env_file:
+      - .env
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+    # Ограничения ресурсов
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+
+    # Логирование
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # Сеть
+    networks:
+      - rtsconns-network
+
+networks:
+  rtsconns-network:
+    driver: bridge
